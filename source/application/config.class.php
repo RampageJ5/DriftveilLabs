@@ -8,9 +8,7 @@
  */
 
 
-//Instantiate the Config Class with the Config JSON
-//Config will set up project settings such as BASE_URL on instantiation
-$c = new Config("../../config/");
+// CLASS MUST BE INSTANTIATED IN THE ROOT INDEX FILE
 
 //Config Class to Return Root Directory
 class Config {
@@ -96,9 +94,10 @@ class Config {
      * Import the Configuration JSONs to set the Project Settings
      * Note, will merge any and all configuration JSONs to get a master config JSON
      * @param string $path_to_config_dir Path to the Configuration Settings Directory
+     * @param bool $debug Default: False | Debugs Configuration Information
      * @throws Exception on config file errors
      */
-    public function __construct(string $path_to_config_dir) {
+    public function __construct(string $path_to_config_dir, bool $debug = true) {
 
         // Temporary Config Data carrier
         $config_data = [];
@@ -118,7 +117,9 @@ class Config {
         $this->metadata = $config_data['project'];
 
         // Debug: Print Settings
-        $this->print_settings();
+        if ($debug) {
+            $this->print_settings();
+        }
 
         // Shorthand the Project Settings
         $s = $this->settings;
@@ -130,14 +131,19 @@ class Config {
         // Define the Project BASE_URL
         define("BASE_URL",$s['base_url']);
 
-        // Require the Navigation Class
-        require_once "nav.class.php";
+        // Require the Autoloader
+        require_once $s['autoloader'];
 
-        // Instantiate the Navigation Class
+        // Instantiate the Navigation Class scoped to the Project Root
         $nav = new Nav($s['root']);
 
-        // Require the Autoloader
-        require_once Nav::$to['vendor/autoload.php'];
+        // Instantiate the Database Class
+        $db = new Database($s['db']);
+
+        // Debug: Test Query
+        if ($debug) {
+            $db->print_results($db->q("SELECT * FROM `pokemon`"),"Pokemon");
+        }
     }
 
 
