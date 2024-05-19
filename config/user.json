@@ -1,0 +1,19 @@
+{
+  "json_metadata": {
+    "author": "Jay Annadurai",
+    "project": "DriftveilLabs",
+    "file_name": "user.json",
+    "description": "Critical Per-User Configuration Settings for the Project"
+  },
+
+  "data": {
+    "config": {
+      "base_url": "http://localhost/",
+      "db": {
+        "username": "user",
+        "password": "password"
+      }
+    }
+  }
+
+}
