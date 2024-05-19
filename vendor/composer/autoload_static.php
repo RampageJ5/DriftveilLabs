@@ -12,6 +12,7 @@ class ComposerStaticInit010ec8bbad4b4e1fe176228cec6eb064
         'Composer\\Autoload\\ComposerStaticInit010ec8bbad4b4e1fe176228cec6eb064' => __DIR__ . '/..' . '/composer/autoload_static.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Config' => __DIR__ . '/../..' . '/source/application/config.class.php',
+        'Database' => __DIR__ . '/../..' . '/source/application/database.class.php',
         'Nav' => __DIR__ . '/../..' . '/source/application/nav.class.php',
         'views\\View' => __DIR__ . '/../..' . '/source/views/view.class.php',
     );
