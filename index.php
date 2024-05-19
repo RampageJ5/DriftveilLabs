@@ -11,7 +11,7 @@
 require_once ("source/application/config.class.php");
 //Instantiate the Config Class with the Config JSON Directory
 //Config will set up project settings such as BASE_URL on instantiation
-$c = new Config("config/");
+Config::set("config/",True);
 
 
 

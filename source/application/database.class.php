@@ -9,13 +9,11 @@
 
 class Database {
 
-    // Binds a Previous Connection
-    private static ?Database $instance = null;
     // Stores the MySQLi Connection
-    private mysqli $connection;
+    private static ?mysqli $connection = null;
 
     /**
-     * Public constructor to singularly establish a database connection
+     * Connects the Application to the Database
      * @param array $db_config Associative array containing database configuration parameters.
      * Must be in the form:
      * [
@@ -25,33 +23,48 @@ class Database {
      *   "password"=> "pass",
      *   "port"=> 3306,
      * ]
+     * @param bool $debug Default: True | Debugs Database Connection Information
+     * @return void
      * @throws Exception if connection fails
      */
-    public function __construct(array $db_config = []) {
+    public static function connect(array $db_config, bool $debug = True) {
 
         try {
-            // If no configuration information is provided
-            if($db_config === []) {
-                // Check for a previous Instance Static Variable Exists
-                // Instance Data must be of type Database
-                if (self::$instance !== null && get_class(self::$instance) === self::class) {
-                    // Return Existing Instance Instead
-                    return self::$instance;
-                } // If the Config Array is Empty without a previous instance, throw an Exception
-                else {
-                    throw new Exception("Database Configuration not provided! Ensure configuration is correct.");
-                }
+
+            // Check for a previous connection to prevent duplicate creation
+            if (self::$connection !== null && get_class(self::$connection) === "mysqli") {
+                // Throw an Exception as there is a new database connection being formed
+                throw new Exception("There is already a database connection! A new one cannot be made.");
             }
 
-            // Check for a previous Instance Static Variable to prevent duplicate creation
-            if (self::$instance !== null && get_class(self::$instance) === self::class) {
-                // Throw an Exception as there is a new database connection being formed
-                throw new Exception("There is already a database instance! A new one cannot be made");
+            // Validator for Associative Array Inputs
+            /**
+             * @param array $target_array Array to Validate
+             * @param string...$keys Keys to check for within the Array
+             * @return bool on conditional success of validation
+             * @throws Exception on validation error
+             */
+            function validate_array_keys($target_array,...$keys): bool
+            {
+                // Ensure that the Keys Exist in the Array
+                foreach ($keys as $key) {
+                    if (!array_key_exists($key, $target_array)) {
+                        throw new Exception("Missing One or More Required Keys: $key");
+                        return false;
+                    }
+                }
+
+                // Return True if Validation is Successful
+                return true;
             }
+
+            // Ensure the Configuration Array has the Correct Keys for Database Settings
+            validate_array_keys($db_config,"host","database","username","password","port");
+
 
             // Establish the Connection to the Database
             // Suppress any Connection Errors
-            $this->connection = new mysqli(
+            self::$connection = new mysqli(
                 $db_config['host'],
                 $db_config['username'],
                 $db_config['password'],
@@ -60,8 +73,8 @@ class Database {
             );
 
             // Error Handler - Connection Error
-            if ($this->connection->connect_error) {
-                throw new Exception("Connection failed: " . $this->connection->connect_error);
+            if (self::$connection->connect_error) {
+                throw new Exception("Connection failed: " . self::$connection->connect_error);
             }
 
         }
@@ -73,6 +86,12 @@ class Database {
             exit;
         }
 
+        // Debug: Execute a Test Query and Print Results
+        if($debug === True) {
+            $test_sql = "SELECT * FROM `pokemon`";
+            self::print_results(self::q($test_sql),"Test Query");
+        }
+
     }
 
     /**
@@ -81,23 +100,31 @@ class Database {
      * @param boolean $return_results Default: True | Return Results as an Associative Array
      * @param boolean $empty_OK Default: False | Allow Empty Result Set
      * @return array|void Associative Array or Empty Results
-     * @throw DatabaseException if there is an issue with the query or results
+     * @throws Exception if there is an issue with the query or results
      */
-    public function q(string $query_SQL, bool $return_results = true, bool $empty_OK = true): ?array
+    public static function q(string $query_SQL, bool $return_results = true, bool $empty_OK = true): ?array
     {
+
         // Declare Array to Hold Potential Results
         $results = null;
 
         // Exception Handling
         try {
 
+            // Ensure there is a Database Connection
+            if (self::$connection === null || get_class(self::$connection) !== "mysqli") {
+                // Throw an Exception as there is no database connection
+                throw new Exception("Database connection has not been established. Use `Database::connect` to connect!");
+            }
+
+
             // Retrieve the $query_SQL argument and execute the query
-            $query = $this->connection->query($query_SQL);
+            $query = self::$connection->query($query_SQL);
 
             // If the Query fails throw new DatabaseException
             if (!$query) {
-
-                // There was an exception with the Query             //TODO: Redefine Exception Class and Have the SQL as a Parameter
+                // There was an exception with the Query
+                //TODO: Redefine Exception Class and Have the SQL as a Parameter
                 throw new Exception("Query failed");
 
             }
@@ -170,7 +197,7 @@ class Database {
      * @param string $query_title Title to Display to the Page
      * @return void Prints the Results Array to HTML
      */
-    public function print_results(array $results_array, string $query_title = "Query Results"): void
+    public static function print_results(array $results_array, string $query_title = "Query Results"): void
     {
         ?>
         <h2> <?= $query_title ?></h2>

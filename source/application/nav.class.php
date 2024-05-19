@@ -11,14 +11,14 @@
 class Nav {
 
     // Roots of the Project
-    private string $root_name;
-    private string $root_dir;
+    private static string $root_name;
+    private static string $root_dir;
 
     // Associative Array Representation of the Project Directory Structure
     private static array $directory_structure = [];
 
-    // Associative Array of Shorthand Paths for Navigation
-    public static array $to = [];
+    // Vectorized Associative Array of Shorthand Paths for Navigation
+    private static array $vectorized_directory_structure = [];
 
     // Array of Dirs to Ignore during a Directory Scan
     private static array $ignore_dirs = ["composer"];
@@ -26,24 +26,27 @@ class Nav {
     /**
      * Builds the Navigation Class
      * @param string $root_directory_name Name of the project's root directory
+     * @param bool $debug Default: True | Debugs Navigation Directory Information
+     * @returns void Initializes Navigation Class
      * @throws Exception on issue
      */
-    public function __construct(string $root_directory_name) {
+    public static function initialize(string $root_directory_name, bool $debug = True): void
+    {
         // Bind the Root Directory Name from the Argument
         // Originally Established in the Configuration File
-        $this->root_name = $root_directory_name;
+        self::$root_name = $root_directory_name;
 
         // Acquire the Path of the Root Directory
-        $this->root_dir = $this->find_root_directory($this->root_name);
+        self::$root_dir = self::find_root_directory(self::$root_name);
 
         // Build the Project Directory Structure
-        self::$directory_structure = $this->get_directory_structure();
+        self::$directory_structure = self::get_directory_structure();
 
         // Build the Shorthand/Vectorized Directory Structure
-        self::$to = self::vectorize_structure(self::$directory_structure,'','/');
+        self::$vectorized_directory_structure = self::vectorize_structure(self::$directory_structure,'','/');
 
         // Debug: Print the Directory Structures
-        $this->print_navigation();
+        $debug? self::print_navigation() : null;
     }
 
     /**
@@ -119,7 +122,7 @@ class Nav {
      * @return string Path to the root directory
      * @throws Exception if root directory not found
      */
-    private function find_root_directory(string $root_dir_name): string {
+    private static function find_root_directory(string $root_dir_name): string {
         $current_dir = __DIR__;
 
         // Navigate up the directory tree until the root directory is found
@@ -137,36 +140,41 @@ class Nav {
     }
 
     /**
-     * Get the root directory path.
-     * @return string Root directory path
-     */
-    public function get_root_dir_path(): string {
-        return $this->root_dir;
-    }
-
-    /**
      * Get the directory structure.
      * @return array Associative array representation of the directory structure
      */
-    public function get_directory_structure(): array {
-        return self::scan_directory($this->root_dir);
+    public static function get_directory_structure(): array {
+        return self::scan_directory(self::$root_dir);
     }
 
     /**
-     * Static Function to Retrieve the Directory Tree
-     * Unlike get_directory_structure, this does not scan
-     * @return array Associative array representation of the directory structure
+     * Signature Static Function
+     * Allows one file to target another as if calling it from the root directory
+     * @param string $path to the Target File from the Root
+     * @return string Absolute Path to the Target File
     */
-    public function to(): array
+    public static function to(string $path): string
     {
-        return self::$directory_structure;
+        try {
+            if (!in_array($path,array_keys(self::$vectorized_directory_structure))){
+                throw new Exception("$path from Root does not lead to an existing file.");
+            }
+        }
+
+        catch (Exception $e){
+            //TODO: Advanced Exception Handling
+            echo $e->getMessage();
+        }
+
+        // Return the Absolute Path to the Item
+        return self::$vectorized_directory_structure[$path];
     }
 
     /**
      * Debug Only! Prints the navigation structure as a pretty HTML string onto the page
      * @return void Prints the project structure to HTML
      */
-    private function print_navigation(): void
+    private static function print_navigation(): void
     {
         ?>
         <h1> Directory Structure </h1>
@@ -175,7 +183,7 @@ class Nav {
         <pre> <?= json_encode(self::$directory_structure, JSON_PRETTY_PRINT) ?></pre>
         <hr>
         <h2> Directory Vectorized Structure </h2>
-        <pre> <?= json_encode(self::$to, JSON_PRETTY_PRINT) ?></pre>
+        <pre> <?= json_encode(self::$vectorized_directory_structure, JSON_PRETTY_PRINT) ?></pre>
         <hr>
         <?php
     }

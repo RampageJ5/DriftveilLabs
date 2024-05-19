@@ -17,8 +17,8 @@ class Config {
     private static string $shared_config = "config.json";
     private static string $user_config = "user.json";
     // Initialize the Configuration Settings Arrays
-    public array $metadata = [];
-    private array $settings = [];
+    public static array $metadata = [];
+    private static array $settings = [];
 
     /**
      * Loads a JSON configuration file
@@ -27,25 +27,33 @@ class Config {
      * @throws Exception on file errors
      */
     private static function load_config(string $path): array {
-        // Error Handler - JSON File Path not found
-        if (!file_exists($path)) {
-            throw new Exception("Configuration JSON file $path not found.");
+        try {
+            // Error Handler - JSON File Path not found
+            if (!file_exists($path)) {
+                throw new Exception("Configuration JSON file $path not found.");
+            }
+
+            // Error Handler - File Path does not Lead to a JSON
+            if (pathinfo($path, PATHINFO_EXTENSION) !== 'json') {
+                throw new Exception("File $path is not a JSON file.");
+            }
+
+            // Import the Config JSON and convert it into an associative array
+            $config_json = file_get_contents($path);
+            $config_aa = json_decode($config_json, true);
+            // Discard the Metadata from the JSON
+            $config_aa = $config_aa['data'];
+
+            // Error Handler - Poor JSON
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new Exception("Error decoding JSON from file $path: " . json_last_error_msg());
+            }
         }
 
-        // Error Handler - File Path does not Lead to a JSON
-        if (pathinfo($path, PATHINFO_EXTENSION) !== 'json') {
-            throw new Exception("File $path is not a JSON file.");
-        }
-
-        // Import the Config JSON and convert it into an associative array
-        $config_json = file_get_contents($path);
-        $config_aa = json_decode($config_json, true);
-        // Discard the Metadata from the JSON
-        $config_aa = $config_aa['data'];
-
-        // Error Handler - Poor JSON
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new Exception("Error decoding JSON from file $path: " . json_last_error_msg());
+        catch (Exception $e) {
+            //TODO: Advanced Exception Handling
+            echo $e->getMessage();
+            exit;
         }
 
         // Return the decoded associative array
@@ -91,59 +99,71 @@ class Config {
     }
 
     /**
+     * Sets Project Configuration
      * Import the Configuration JSONs to set the Project Settings
      * Note, will merge any and all configuration JSONs to get a master config JSON
      * @param string $path_to_config_dir Path to the Configuration Settings Directory
-     * @param bool $debug Default: False | Debugs Configuration Information
+     * @param bool $debug Default: True | Debugs Configuration Information
+     * @returns void
      * @throws Exception on config file errors
      */
-    public function __construct(string $path_to_config_dir, bool $debug = true) {
+    public static function set(string $path_to_config_dir, bool $debug = true): void
+    {
 
-        // Temporary Config Data carrier
-        $config_data = [];
+        try {
+            // Temporary Config Data carrier
+            $config_data = [];
 
-        // Import the Configs
-        foreach ([self::$shared_config,self::$user_config] as $config) {
-            // Get the Path to the Config JSON
-            $config_path = $path_to_config_dir . $config;
-            // Import the File
-            $config = self::load_config($config_path);
-            // Bind the Settings from the Associative Array
-            $config_data = self::extend_array($config_data, $config, true);
+            // Import the Configs
+            foreach ([self::$shared_config,self::$user_config] as $config) {
+                // Get the Path to the Config JSON
+                $config_path = $path_to_config_dir . $config;
+                // Import the File
+                $config = self::load_config($config_path);
+                // Bind the Settings from the Associative Array
+                $config_data = self::extend_array($config_data, $config, true);
+            }
+
+            // Bind the Information
+            self::$settings = $config_data['config'];
+            self::$metadata = $config_data['project'];
+
+            // Debug: Print Settings
+            if ($debug) {
+                self::print_settings();
+            }
+
+            // Shorthand the Project Settings
+            $s = self::$settings;
+
+            // Error Reporting Level: 0 to turn off all error reporting; E_ALL to report all
+            error_reporting(constant($s['error_reporting_level']));
+            // Set Local Timezone to EDT | UTC -4:00 or otherwise specified
+            date_default_timezone_set($s['timezone']);
+            // Define the Project BASE_URL
+            define("BASE_URL",$s['base_url']);
+
+            // Require the Autoloader
+            require_once $s['autoloader'];
+
+            // Instantiate the Navigation Class scoped to the Project Root
+            Nav::initialize($s['root'],$debug);
+
+            // Alias the Database Class
+            class_alias('Database','db');
+            // Instantiate the Database Class
+            db::connect($s['db'],$debug);
+
+
         }
 
-        // Bind the Information
-        $this->settings = $config_data['config'];
-        $this->metadata = $config_data['project'];
-
-        // Debug: Print Settings
-        if ($debug) {
-            $this->print_settings();
+        //General Exception Handling
+        catch (Exception $e) {
+            //TODO: Advanced Exception Handling
+            echo $e->getMessage();
+            exit;
         }
 
-        // Shorthand the Project Settings
-        $s = $this->settings;
-
-        // Error Reporting Level: 0 to turn off all error reporting; E_ALL to report all
-        error_reporting(constant($s['error_reporting_level']));
-        // Set Local Timezone to EDT | UTC -4:00 or otherwise specified
-        date_default_timezone_set($s['timezone']);
-        // Define the Project BASE_URL
-        define("BASE_URL",$s['base_url']);
-
-        // Require the Autoloader
-        require_once $s['autoloader'];
-
-        // Instantiate the Navigation Class scoped to the Project Root
-        $nav = new Nav($s['root']);
-
-        // Instantiate the Database Class
-        $db = new Database($s['db']);
-
-        // Debug: Test Query
-        if ($debug) {
-            $db->print_results($db->q("SELECT * FROM `pokemon`"),"Pokemon");
-        }
     }
 
 
@@ -152,16 +172,16 @@ class Config {
      * Debug Only! Prints the configuration settings as a pretty HTML string onto the page
      * @return void Prints the Configuration Settings to HTML
      */
-    private function print_settings(): void
+    private static function print_settings(): void
     {
         ?>
             <h1> Configuration Settings </h1>
             <hr>
             <h2> Project Metadata </h2>
-            <pre> <?= json_encode($this->metadata, JSON_PRETTY_PRINT) ?></pre>
+            <pre> <?= json_encode(self::$metadata, JSON_PRETTY_PRINT) ?></pre>
             <hr>
             <h2> Project Configuration </h2>
-            <pre> <?= json_encode($this->settings, JSON_PRETTY_PRINT) ?></pre>
+            <pre> <?= json_encode(self::$settings, JSON_PRETTY_PRINT) ?></pre>
             <hr>
         <?php
     }
