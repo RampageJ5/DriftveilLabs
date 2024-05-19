@@ -130,87 +130,29 @@ class Config {
 
         // Require the Autoloader
         require_once $s['autoloader'];
+
+
     }
 
-//    /**
-//     * @var string BaseURL of the Application, Crucial for Dispatcher
-//     */
-//    public string $baseURL;
-//    public static string $baseURLJay = 'http://localhost/Informatics/Projects/I211/Projects/G2-I211/Final%20Project/Root';
-//    public static string $baseURLStandard = 'http://localhost/G2-I211/Final%20Project/Root';
-//
-//    /** Generate a Config Object that establishes project settings on construction
-//     * @param string $baseURL BaseURL of the Application, 'http://localhost/.../Root'
-//     * @param int $errorReportingLevel Default is 'E_ALL' | Defines Magnitude of Errors to Report
-//     * @param string $timeZone Default is Indy: 'America/Indiana/Indianapolis' | Defines Timezone when Fetching Time and Date
-//     * @param string $pathAutoload Path to Composer's Vendor Autoload.php from Root | Autoload.php fetches All Required Classes
-//     */
-//    public function __construct(string $baseURL, int $errorReportingLevel = E_ALL, string $timeZone = 'America/Indiana/Indianapolis', string $pathAutoload = 'vendor/autoload.php')
-//    {
-//        //Require Composer's Autoload.php
-//        //To Update, Use the Terminal to Navigate to the Project Root Directory and use the 'composer dumpautoload -o' command
-//        require_once self::root(true).$pathAutoload;
-//
-//        //Error Reporting Level: 0 to turn off all error reporting; E_ALL to report all
-//        error_reporting($errorReportingLevel);
-//        //Set Local Timezone to EDT | UTC -4:00
-//        date_default_timezone_set($timeZone);
-//        //Define the Project BASE_URL
-//        define("BASE_URL",$baseURL);
-//        //Bind the BaseURL
-//        $this->baseURL = $baseURL;
-//    }
-//
-//    /**
-//     * @var array $authors Names of the Authors of the Application
-//     */
-//    public static array $authors = [
-//        'Jay Annadurai',
-//        'Jenna Horrall',
-//    ];
-//
-//    /**
-//     * @var string $applicationTitle
-//     */
-//    public static string $applicationTitle = 'Accessible Archive';
-//
-//    /** Method to Inject
-//     * @return void Injects HTML Comments with Appropriate Name
-//     */
-//    public static function copyright(): void
-//    {
+    /**
+     * Debug Only! Prints the configuration settings as a pretty HTML string onto the page
+     * @return void Prints the Configuration Settings to HTML
+     */
+    private function print_settings(){
+        ?>
+            <h1> Configuration Settings </h1>
+            <hr>
+            <h2> Project Metadata </h2>
+            <pre> <?= json_encode($this->metadata) ?></pre>
+            <hr>
+            <h2> Project Configuration </h2>
+            <pre> <?= json_encode($this->settings) ?></pre>
+            <hr>
+        <?php
+    }
 
-//
-//    /**
-//     * @var int Number of Folders Relative to Root |
-//     * I.e: 0 is Root, 1 is Folder Directly in Root
-//     */
-//    protected static int $levelsBelowRoot = 1;
-//
-//    /** Method that Returns the Root Directory
-//     * @param boolean $enableTrailingSlash Return with Trailing '/'
-//     * @return string of Root Directory
-//     */
-//    public static function root(bool $enableTrailingSlash = false): string
-//    {
-//        //Levels is relative to where the Config File is Compared to Root
-//        //Level of 1 is if Config is Already in the Root Folder
-//        $levelsToRoot = self::$levelsBelowRoot+1;
-//
-//        //Return the $levelsToRoot Directory above the directory of the Config File
-//        $dir = dirname(__FILE__,$levelsToRoot);
-//
-//        //Return With or Without Trailing Slash
-//        return $enableTrailingSlash? $dir.'/' : $dir;
-//
-//    }
+} //End of Config Class
 
-}//End of Config Class
-
-//// Debug the Configuration JSON
-//echo '<pre>';
-//echo json_encode($c, JSON_PRETTY_PRINT);
-//echo '</pre>';
 
 ?>
 
