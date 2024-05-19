@@ -80,7 +80,6 @@ class Config {
                 else {
                     $base_array[$key] = $value;
                 }
-
             }
 
             // If the Keep New Pairs flag is enabled, add the new key-value pairs from the Target Array
@@ -126,16 +125,22 @@ class Config {
 
         // Error Reporting Level: 0 to turn off all error reporting; E_ALL to report all
         error_reporting(constant($s['error_reporting_level']));
-        // Set Local Timezone to EDT | UTC -4:00
+        // Set Local Timezone to EDT | UTC -4:00 or otherwise specified
         date_default_timezone_set($s['timezone']);
         // Define the Project BASE_URL
         define("BASE_URL",$s['base_url']);
 
+        // Require the Navigation Class
+        require_once "nav.class.php";
+
+        // Instantiate the Navigation Class
+        $nav = new Nav($s['root']);
+
         // Require the Autoloader
-        //require_once $s['autoloader'];
-
-
+        require_once Nav::$to['vendor/autoload.php'];
     }
+
+
 
     /**
      * Debug Only! Prints the configuration settings as a pretty HTML string onto the page
