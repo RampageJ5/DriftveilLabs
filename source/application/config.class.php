@@ -118,18 +118,21 @@ class Config {
         $this->settings = $config_data['config'];
         $this->metadata = $config_data['project'];
 
+        // Debug: Print Settings
+        $this->print_settings();
+
         // Shorthand the Project Settings
         $s = $this->settings;
 
         // Error Reporting Level: 0 to turn off all error reporting; E_ALL to report all
-        error_reporting($s['error_reporting_level']);
+        error_reporting(constant($s['error_reporting_level']));
         // Set Local Timezone to EDT | UTC -4:00
         date_default_timezone_set($s['timezone']);
         // Define the Project BASE_URL
         define("BASE_URL",$s['base_url']);
 
         // Require the Autoloader
-        require_once $s['autoloader'];
+        //require_once $s['autoloader'];
 
 
     }
@@ -138,15 +141,16 @@ class Config {
      * Debug Only! Prints the configuration settings as a pretty HTML string onto the page
      * @return void Prints the Configuration Settings to HTML
      */
-    private function print_settings(){
+    private function print_settings(): void
+    {
         ?>
             <h1> Configuration Settings </h1>
             <hr>
             <h2> Project Metadata </h2>
-            <pre> <?= json_encode($this->metadata) ?></pre>
+            <pre> <?= json_encode($this->metadata, JSON_PRETTY_PRINT) ?></pre>
             <hr>
             <h2> Project Configuration </h2>
-            <pre> <?= json_encode($this->settings) ?></pre>
+            <pre> <?= json_encode($this->settings, JSON_PRETTY_PRINT) ?></pre>
             <hr>
         <?php
     }
@@ -155,4 +159,3 @@ class Config {
 
 
 ?>
-
