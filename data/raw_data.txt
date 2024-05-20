@@ -1,0 +1,227 @@
+All Pokemon Types:
+Normal
+Fire
+Water
+Electric
+Grass
+Ice
+Fighting
+Poison
+Ground
+Flying
+Psychic
+Bug
+Rock
+Ghost
+Dragon
+Dark
+Steel
+Fairy
+
+Pokemon Type Colors:
+	normal: '#A8A77A',
+	fire: '#EE8130',
+	water: '#6390F0',
+	electric: '#F7D02C',
+	grass: '#7AC74C',
+	ice: '#96D9D6',
+	fighting: '#C22E28',
+	poison: '#A33EA1',
+	ground: '#E2BF65',
+	flying: '#A98FF3',
+	psychic: '#F95587',
+	bug: '#A6B91A',
+	rock: '#B6A136',
+	ghost: '#735797',
+	dragon: '#6F35FC',
+	dark: '#705746',
+	steel: '#B7B7CE',
+	fairy: '#D685AD',
+
+All Pokemon Natures:
+Nature	Increases	Decreases
+Adamant	Attack	Sp. Atk
+Bashful	Sp. Atk	Sp. Atk
+Bold	Defense	Attack
+Brave	Attack	Speed
+Calm	Sp. Def	Attack
+Careful	Sp. Def	Sp. Atk
+Docile	Defense	Defense
+Gentle	Sp. Def	Defense
+Hardy	Attack	Attack
+Hasty	Speed	Defense
+Impish	Defense	Sp. Atk
+Jolly	Speed	Sp. Atk
+Lax	Defense	Sp. Def
+Lonely	Attack	Defense
+Mild	Sp. Atk	Defense
+Modest	Sp. Atk	Attack
+Naive	Speed	Sp. Def
+Naughty	Attack	Sp. Def
+Quiet	Sp. Atk	Speed
+Quirky	Sp. Def	Sp. Def
+Rash	Sp. Atk	Sp. Def
+Relaxed	Defense	Speed
+Sassy	Sp. Def	Speed
+Serious	Speed	Speed
+Timid	Speed	Attack
+
+Pokemon Regions
+1	Kanto
+2	Johto
+3	Hoenn
+4	Sevii Islands
+5	Sinnoh
+6	Unova
+7	Kalos
+8	Alola
+9	Galar
+
+All Unova Routes: https://pokemondb.net/location#tab=loc-unova
+Route 1
+Route 2
+Route 3
+Route 4
+Route 5
+Route 6
+Route 7
+Route 8
+Route 9
+Route 10
+Route 11
+Route 12
+Route 13
+Route 14
+Route 15
+Route 16
+Route 17
+Route 18
+Route 19
+Route 20
+Route 21
+Route 22
+Route 23
+Abundant Shrine
+Accumula Town
+Anville Town
+Aspertia City
+Battle Subway
+Black City
+Castelia City
+Castelia Sewers
+Cave of Being
+Celestial Tower
+Challenger's Cave
+Chargestone Cave
+Clay Tunnel
+Cold Storage
+Desert Resort
+Dragonspiral Tower
+Dreamyard
+Driftveil City
+Driftveil Drawbridge
+Floccesy Ranch
+Floccesy Town
+Gear Station
+Giant Chasm
+High Link
+Humilau City
+Icirrus City
+Lacunosa Town
+Lentimas Town
+Liberty Island
+Lostlorn Forest
+Marine Tube
+Marvelous Bridge
+Mistralton Cave
+Mistralton City
+Moor of Icirrus
+N's Castle
+Nacrene City
+Nature Preserve
+Nature Sanctuary
+Nimbasa City
+Nuvema Town
+Opelucid City
+P2 Laboratory
+Pinwheel Forest
+Plasma Frigate
+Pledge Grove
+Pokémon League
+Pokémon World Tournament
+Relic Castle
+Relic Passage
+Reversal Mountain
+Roaming Unova
+Seaside Cave
+Skyarrow Bridge
+Strange House
+Striaton City
+Tubeline Bridge
+Twist Mountain
+Undella Bay
+Undella Town
+Underground Ruins
+Undersea Ruins
+Unity Tower
+Victory Road
+Village Bridge
+Virbank City
+Virbank Complex
+Wellspring Cave
+White Forest
+
+Sample Pokemon:
+Pokemon 371 - Bagon  - Types: Dragon - 	HP	Attack	Defense	Sp. Attack	Sp. Defense	Speed
+Base Stats	45	75	60	40	30	50
+Abilities: Rock Head - Sheer Force (Hidden Ability)
+Rock Head: Does not receive recoil damage from recoil-causing damages.
+Hidden Ability (Available):
+Sheer Force: Moves with a secondary effect are increased in power by 33% but lose their secondary effect
+Region: Unova
+Route: White Forest
+
+Pokemon 372 - Shelgon (Evolves from Bagon) - Types: Dragon - HP	Attack	Defense	Sp. Attack	Sp. Defense	Speed
+Base Stats	65	95	100	60	50	50
+Abilities: Rock Head - Overcoat (Hidden Ability)
+Rock Head: Does not receive recoil damage from recoil-causing damages.
+Hidden Ability (Available):
+Overcoat: It will not take damage from weather effects.
+Region: Unova
+Region Route: NULL
+
+Pokemon 373 - Salamence (Evolves from Salamence) - Types: Dragon and Flying - HP	Attack	Defense	Sp. Attack	Sp. Defense	Speed
+Base Stats	95	135	80	110	80	100
+Abilities: Intimidate - Moxie (Hidden Ability)
+Intimidate: Upon entering battle, the opponent’s Attack lowers one stage. In a Double Battle, both opponents’ Attack are lowered. Pokémon with the Clear Body, Hyper Cutter, or White Smoke ability are unaffected. In a link battle, if both sides switch on the same turn, and first player sends out a Pokémon with Intimidate, the opponent’s Attack will be lowered before the opponent’s Pokémon switches.
+Hidden Ability (Available):
+Moxie: Attack is raised by one stage when the Pokémon knocks out another Pokémon
+Region: Unova
+Region Route: NULL
+
+Pokemon 443 - Gible - Types: Dragon and Ground - HP	Attack	Defense	Sp. Attack	Sp. Defense	Speed
+Base Stats	58	70	45	40	45	42
+Abilities: Sand Veil - Rough Skin (Hidden Ability)
+Sand Veil: Raises the Pokémon’s evasion during a sandstorm by one level.
+Hidden Ability (Available):
+Rough Skin: The opponent is hurt by 1/16th of his maxium Hit Points of recoil when using an attack, that requires physical contact, against this Pokémon.
+Region: Unova
+Region Route: Floccesy Town
+
+Pokemon 444 - Gabite (Evolves from Gabite) - Types: Dragon and Ground - HP	Attack	Defense	Sp. Attack	Sp. Defense	Speed
+Base Stats	68	90	65	50	55	82
+Abilities: Sand Veil - Rough Skin (Hidden Ability)
+Sand Veil: Raises the Pokémon’s evasion during a sandstorm by one level.
+Hidden Ability (Available):
+Rough Skin: The opponent is hurt by 1/16th of his maxium Hit Points of recoil when using an attack, that requires physical contact, against this Pokémon.
+Region: Unova
+Region Route: NULL
+
+Pokemon 445 - Garchomp (Evolves from Garchomp) - Types: Dragon and Ground - HP	Attack	Defense	Sp. Attack	Sp. Defense	Speed
+Base Stats	108	130	95	80	85	102
+Abilities: Sand Veil - Rough Skin (Hidden Ability)
+Sand Veil: Raises the Pokémon’s evasion during a sandstorm by one level.
+Hidden Ability (Available):
+Rough Skin: The opponent is hurt by 1/16th of his maxium Hit Points of recoil when using an attack, that requires physical contact, against this Pokémon.
+Region: Unova
+Region Route: NULL

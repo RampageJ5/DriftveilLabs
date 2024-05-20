@@ -1,0 +1,54 @@
+{
+  "json_metadata": {
+    "author": "Jay Annadurai",
+    "project": "DriftveilLabs",
+    "file_name": "config.json",
+    "description": "Core configuration settings for the Driftveil Labs Application"
+  },
+
+  "data": {
+
+    "project": {
+      "authors": [
+        "Jay Annadurai",
+        "Jeremy Black",
+        "Sarah Wood"
+      ],
+      "title": "Driftveil Labs",
+      "date": "10 May 2024"
+    },
+
+    "config": {
+      "root": "DriftveilLabs",
+      "source": "source",
+      "autoloader": "vendor/autoload.php",
+      "base_url": "http://localhost/",
+      "error_reporting_level": "E_ALL",
+      "timezone": "America/Indiana/Indianapolis",
+
+      "db": {
+        "host": "localhost",
+        "database": "poke_db",
+        "username": "phpuser",
+        "password": "phpuser",
+        "port": 3306,
+        "tables": {
+          "pokemon": "Pokemon",
+          "stats": "PokemonStats",
+          "pokemon_evolutions": "Pokemon_Evolutions",
+          "region": "Region",
+          "route": "Route",
+          "pokemon_route": "Pokemon_Route",
+          "type": "Type",
+          "pokemon_type": "Pokemon_Type",
+          "ability": "Ability",
+          "pokemon_ability": "Pokemon_Ability",
+          "user": "User",
+          "user_pokemon": "User_Pokemon",
+          "nature": "Nature"
+        }
+      }
+
+    }
+  }
+}
