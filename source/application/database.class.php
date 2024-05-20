@@ -86,6 +86,7 @@ class Database {
             exit;
         }
 
+
         // Debug: Execute a Test Query and Print Results
         if($debug === True) {
             $test_sql = "SELECT * FROM `pokemon`";
@@ -116,6 +117,10 @@ class Database {
                 // Throw an Exception as there is no database connection
                 throw new Exception("Database connection has not been established. Use `Database::connect` to connect!");
             }
+
+            echo "<script>";
+            echo "console.log(".json_encode($query_SQL).");";
+            echo "</script>";
 
 
             // Retrieve the $query_SQL argument and execute the query
